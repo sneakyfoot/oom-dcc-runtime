@@ -31,6 +31,7 @@ let
         export PATH="$HFS/bin:$PATH"
         export HOUDINI_PATH="$HFS/houdini:&"
         export HOUDINI_USE_HFS_OCL=0
+        export HOUDINI_PACKAGE_DIR=/mnt/RAID/OOM/dcc/oom-houdini/packages
       '';
 
       runScript = "bash";
