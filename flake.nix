@@ -11,6 +11,7 @@
     pkgs = import nixpkgs {
       inherit system;
       config.allowUnfree = true;
+      config.cudaSupport = true;
     };
 
 
@@ -20,7 +21,11 @@
 
 
     # Shared VRP-ish runtime deps for all DCCs (Houdini, Nuke, 3DE, etc.)
-    commonRuntimePkgs = pkgs: with pkgs; [
+    commonRuntimePkgs = pkgs: 
+      let
+        cuda = pkgs.cudaPackages_12_8;
+      in
+      with pkgs; [
       stdenv.cc.cc.lib
       glibc
       zlib
@@ -42,7 +47,13 @@
       qt5.qtwayland
       nettools
       bintools
-      cudaPackages_12_8
+      
+      cuda.libcublas
+      cuda.cudnn
+      cuda.libcufft
+      cuda.libcurand
+      cuda.cuda_nvrtc
+
       ocl-icd
       opencl-headers
       clinfo
