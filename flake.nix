@@ -42,6 +42,7 @@
       qt5.qtwayland
       nettools
       bintools
+      cudaPackages_12_8
       ocl-icd
       opencl-headers
       clinfo
