@@ -146,7 +146,7 @@
     houdiniWrapper =
       pkgs.writeShellScriptBin "houdini" ''
         # Run Houdini inside the FHS env
-        exec ${houdiniFhsEnv}/bin/houdini-fhs houdini "$@"
+        exec ${houdiniFhsEnv}/bin/houdini-fhs ${houdiniHostRoot}/bin/houdini "$@"
       '';
 
 
