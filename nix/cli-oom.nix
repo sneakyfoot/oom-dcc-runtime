@@ -36,7 +36,7 @@ let
       if [ -x "${oomRepo}/bin/${script}" ]; then
         if [ $emit_env -eq 1 ]; then
           rm -f /tmp/oom.env
-          ${pkgs.bash}/bin/bash "${oomRepo}/bin/${script}" "$@"
+          ${pkgs.bash}/bin/bash "${oomRepo}/bin/${script}" "$@" >/dev/null
           if [ -s /tmp/oom.env ]; then
             cat /tmp/oom.env
             exit 0
@@ -53,7 +53,7 @@ let
       if [ -f "$OOM_CORE_PATH/${script}.py" ]; then
         if [ $emit_env -eq 1 ]; then
           rm -f /tmp/oom.env
-          uv run "$OOM_CORE_PATH/${script}.py" "$@"
+          uv run "$OOM_CORE_PATH/${script}.py" "$@" >/dev/null
           if [ -s /tmp/oom.env ]; then
             cat /tmp/oom.env
             exit 0
