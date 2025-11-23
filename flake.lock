@@ -16,9 +16,26 @@
         "type": "github"
       }
     },
+    "oom-src": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1763240429,
+        "narHash": "sha256-BK0k8HjGc3mCy1ZCc/DDAILYimZ93vrIpsEH6P80zzM=",
+        "owner": "sneakyfoot",
+        "repo": "OOM",
+        "rev": "0ad0ef268eacd08ee30630e0a653aaed90bc4d17",
+        "type": "github"
+      },
+      "original": {
+        "owner": "sneakyfoot",
+        "repo": "OOM",
+        "type": "github"
+      }
+    },
     "root": {
       "inputs": {
-        "nixpkgs": "nixpkgs"
+        "nixpkgs": "nixpkgs",
+        "oom-src": "oom-src"
       }
     }
   },
