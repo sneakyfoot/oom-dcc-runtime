@@ -42,6 +42,7 @@ in
     cuda.libcufft
     cuda.libcurand
     cuda.cuda_nvrtc
+    cuda.cuda_opencl
 
     ocl-icd
     opencl-headers

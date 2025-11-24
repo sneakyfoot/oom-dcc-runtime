@@ -31,6 +31,7 @@ let
         export PATH="$HFS/bin:$PATH"
         export HOUDINI_PATH="$HFS/houdini:&"
         export HOUDINI_USE_HFS_OCL=0
+        export HHP="$HFS/houdini/python3.11libs"
         export HOUDINI_PACKAGE_DIR=/opt/oom-repo/OOM/dcc/oom-houdini/packages
       '';
 
