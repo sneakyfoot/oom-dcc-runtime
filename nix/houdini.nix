@@ -6,6 +6,38 @@
 }:
 
 let
+  houdiniDeps = commonRuntimePkgs pkgs;
+
+  mkHoudiniProfile = { hfsRoot, packageDir ? null }: ''
+    ${vfxProfile}
+
+    export HFS=${hfsRoot}
+    export PATH="$HFS/bin:$PATH"
+    export HOUDINI_PATH="$HFS/houdini:&"
+    export HOUDINI_USE_HFS_OCL=0
+    export HHP="$HFS/houdini/python3.11libs"
+  '' + pkgs.lib.optionalString (packageDir != null) ''
+    export HOUDINI_PACKAGE_DIR=${packageDir}
+  '';
+
+  houdiniHostProfile = mkHoudiniProfile {
+    hfsRoot    = houdiniHostRoot;
+    packageDir = "/opt/oom-repo/OOM/dcc/oom-houdini/packages";
+  };
+
+  houdiniContainerProfile = mkHoudiniProfile {
+    hfsRoot    = houdiniContainerRoot;
+    packageDir = "/opt/oom-repo/OOM/dcc/oom-houdini/packages";
+  };
+
+  houdiniEnv =
+    pkgs.writeShellScriptBin "houdini-env" ''
+      ${houdiniContainerProfile}
+
+      exec "$HFS/bin/houdini" "$@"
+    '';
+
+
   vfxFhsEnv =
     pkgs.buildFHSEnv {
       name = "vfx-fhs";
@@ -24,16 +56,7 @@ let
 
       targetPkgs = commonRuntimePkgs;
 
-      profile = vfxProfile + ''
-        # Houdini-specific runtime
-
-        export HFS=${houdiniHostRoot}
-        export PATH="$HFS/bin:$PATH"
-        export HOUDINI_PATH="$HFS/houdini:&"
-        export HOUDINI_USE_HFS_OCL=0
-        export HHP="$HFS/houdini/python3.11libs"
-        export HOUDINI_PACKAGE_DIR=/opt/oom-repo/OOM/dcc/oom-houdini/packages
-      '';
+      profile = houdiniHostProfile;
 
       runScript = "bash";
     };
@@ -49,7 +72,7 @@ let
     pkgs.buildEnv {
       name = "houdini-runtime-rootfs";
 
-      paths = commonRuntimePkgs;
+      paths = houdiniDeps ++ [ houdiniEnv ];
 
       pathsToLink = [
         "/bin"
@@ -67,42 +90,10 @@ let
 
       copyToRoot = [ houdiniRootfs ];
 
-      extraCommands = ''
-        mkdir -p etc/profile.d
-
-        cat > etc/profile << 'EOF'
-for f in /etc/profile.d/*.sh; do
-  if [ -r "$f" ]; then
-    . "$f"
-  fi
-done
-EOF
-
-        cat > etc/profile.d/vfx.sh << 'EOF'
-${vfxProfile}
-EOF
-
-        cat > etc/profile.d/houdini.sh << 'EOF'
-export HFS=${houdiniContainerRoot}
-export PATH="$HFS/bin:/bin:$PATH"
-export HOUDINI_PATH="$HFS/houdini:&"
-export HOUDINI_USE_HFS_OCL=0
-EOF
-      '';
-
       config = {
         WorkingDir = "/workspace";
 
-        Env = [
-          "HFS=${houdiniContainerRoot}"
-          "PATH=${houdiniContainerRoot}/bin:/bin"
-          "HOUDINI_PATH=${houdiniContainerRoot}/houdini:&"
-          "HOUDINI_USE_HFS_OCL=0"
-          "SESI_LMHOST=your-houdini-license-server"
-          "HOUDINI_LICENSE_METHOD=sesinetd"
-        ];
-
-        Entrypoint = [ "/bin/bash" "-lc" ];
+        Cmd = [ "/bin/houdini-env" ];
       };
     };
 
@@ -115,4 +106,3 @@ in
     houdiniRootfs
     houdiniRuntimeImage;
 }
-
