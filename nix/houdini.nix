@@ -38,6 +38,14 @@ let
       exec "$HFS/bin/houdini" "$@"
     '';
 
+  # Simple launcher: run the provided command as-is, otherwise drop into bash.
+  fhsLauncher = pkgs.writeShellScript "houdini-fhs-launch" ''
+    if [ "$#" -gt 0 ]; then
+      exec "$@"
+    else
+      exec ${pkgs.bashInteractive}/bin/bash
+    fi
+  '';
 
   vfxFhsEnv =
     pkgs.buildFHSEnv {
@@ -47,7 +55,7 @@ let
 
       profile = vfxProfile;
 
-      runScript = "bash";
+      runScript = fhsLauncher;
     };
 
 
@@ -59,7 +67,7 @@ let
 
       profile = houdiniHostProfile;
 
-      runScript = "bash";
+      runScript = fhsLauncher;
     };
 
 
