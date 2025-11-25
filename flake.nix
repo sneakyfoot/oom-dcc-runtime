@@ -44,6 +44,7 @@
       houdini-fhs          = houdini.houdiniFhsEnv;
       houdini              = houdini.houdiniWrapper;
       houdini-runtime-image = houdini.houdiniRuntimeImage;
+      nuke                  = houdini.nukeWrapper;
 
       # OOM CLI wrappers
       oom      = oomCli.oom;

@@ -2,6 +2,7 @@
 , commonRuntimePkgs
 , vfxProfile
 , houdiniHostRoot ? "/mnt/RAID/Assets/DCCs/houdini/latest"
+, nukeHostRoot ? "/mnt/RAID/Assets/DCCs/nuke/latest"
 , houdiniContainerRoot ? "/opt/houdini"
 }:
 
@@ -67,6 +68,10 @@ let
       exec ${houdiniFhsEnv}/bin/houdini-fhs ${houdiniHostRoot}/bin/houdini "$@"
     '';
 
+  nukeWrapper =
+    pkgs.writeShellScriptBin "nuke" ''
+      exec ${houdiniFhsEnv}/bin/houdini-fhs ${nukeHostRoot}/Nuke16.0 "$@"
+    '';
 
   houdiniRootfs =
     pkgs.buildEnv {
@@ -104,5 +109,6 @@ in
     houdiniFhsEnv
     houdiniWrapper
     houdiniRootfs
-    houdiniRuntimeImage;
+    houdiniRuntimeImage
+    nukeWrapper;
 }

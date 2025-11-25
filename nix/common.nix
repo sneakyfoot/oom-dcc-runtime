@@ -20,6 +20,7 @@ in
     zlib
     libGLU
     libGL
+    krb5
     alsa-lib
     fontconfig
     zlib
@@ -36,6 +37,7 @@ in
     qt5.qtwayland
     nettools
     bintools
+    glib
 
     cuda.libcublas
     cuda.cudnn
