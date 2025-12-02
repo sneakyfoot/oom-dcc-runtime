@@ -43,6 +43,7 @@
       vfx-fhs              = houdini.vfxFhsEnv;
       houdini-fhs          = houdini.houdiniFhsEnv;
       houdini              = houdini.houdiniWrapper;
+      mplay                 = houdini.mplayWrapper;
       houdini-runtime-image = houdini.houdiniRuntimeImage;
       nuke                  = houdini.nukeWrapper;
 
