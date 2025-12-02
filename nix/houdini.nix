@@ -76,6 +76,11 @@ let
       exec ${houdiniFhsEnv}/bin/houdini-fhs ${houdiniHostRoot}/bin/houdini "$@"
     '';
 
+  mplayWrapper =
+    pkgs.writeShellScriptBin "mplay" ''
+      exec ${houdiniFhsEnv}/bin/houdini-fhs ${houdiniHostRoot}/bin/mplay "$@"
+    '';
+
   nukeWrapper =
     pkgs.writeShellScriptBin "nuke" ''
       exec ${houdiniFhsEnv}/bin/houdini-fhs ${nukeHostRoot}/Nuke16.0 "$@"
@@ -116,6 +121,7 @@ in
     vfxFhsEnv
     houdiniFhsEnv
     houdiniWrapper
+    mplayWrapper
     houdiniRootfs
     houdiniRuntimeImage
     nukeWrapper;
